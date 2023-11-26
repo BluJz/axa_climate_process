@@ -12,7 +12,7 @@ def main():
     agri_df = load_agri_data()
 
     # Select the variable to plot
-    variable = st.selectbox("Sélectionnez la variable d'intérêt: ", agri_df['variable'].unique())
+    variable = st.selectbox("Sélectionnez la variable d'intérêt: ", agri_df['variable'].unique(), index=2)
 
     # Filter DataFrame based on selected variable
     filtered_df = agri_df[agri_df['variable'] == variable]
