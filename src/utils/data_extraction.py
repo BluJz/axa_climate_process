@@ -1,6 +1,7 @@
 import geopandas as gpd
 import pandas as pd
 from shapely.ops import nearest_points
+import streamlit as st
 
 def load_agri_data(path="../data/agreste.csv", drop_columns=['Unnamed: 0', 'n1', 'n2', 'n3', 'n4', 'n5', 'departement']):
     df_agri = pd.read_csv(path)
@@ -12,14 +13,25 @@ def load_agri_data(path="../data/agreste.csv", drop_columns=['Unnamed: 0', 'n1',
 
 
 def load_meteo_data_date(path="../data/ERA5_data.parquet", specific_date='2020-01-01'):
-    df_meteorological = pd.read_parquet("../data/ERA5_data.parquet")
+    df_meteorological = pd.read_parquet(path)
     df_specific_date = df_meteorological[
         df_meteorological.index.get_level_values("date") == specific_date
     ]
-    
-    return df_specific_date
+
+    gdf_meteorological = gpd.GeoDataFrame(
+        df_specific_date,
+        geometry=gpd.points_from_xy(
+            df_specific_date.index.get_level_values("longitude"),
+            df_specific_date.index.get_level_values("latitude"),
+        ),
+    )
+
+    gdf_meteorological["id"] = range(len(gdf_meteorological))
+
+    return gdf_meteorological
 
 
+@st.cache_data
 def load_communes_geometry(path_gpd_communes="../data/communes-20220101-shp/", path_df_communes="../data/cog_ensemble_2021_csv/commune2021.csv", path_base_meteo="../data/ERA5_data.parquet"):
     # Extract a 'base' meteo dataframe to build the geometry of communes on it
     df_base_meteo = pd.read_parquet(path_base_meteo)
@@ -89,7 +101,4 @@ def load_communes_geometry(path_gpd_communes="../data/communes-20220101-shp/", p
 
     gdf_communes_meteo = gdf_communes.dissolve(by="nearest_id", as_index=False)
 
-    # Convert the GeoDataFrame to GeoJSON
-    geojson_communes_meteo = gdf_communes_meteo.to_json()
-
-    return gdf_communes_meteo, geojson_communes_meteo
+    return gdf_communes_meteo

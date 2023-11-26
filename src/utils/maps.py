@@ -1,7 +1,7 @@
 import folium
 from folium.features import GeoJsonTooltip
 
-def create_map(geo_df, geojson_data, columns=["nearest_id, precipitation"], title='Precipitation levels'):
+def create_map(geo_df, geojson_data, columns=['id', 'precipitation'], legend_title='Precipitation levels'):
     # Create a Folium map object
     m = folium.Map(
         location=[
@@ -16,11 +16,11 @@ def create_map(geo_df, geojson_data, columns=["nearest_id, precipitation"], titl
         geo_data=geojson_data,
         data=geo_df,
         columns=columns,
-        key_on="feature.properties.nearest_id",
+        key_on="feature.properties.id",
         fill_color="YlGnBu",  # Make sure this color scale is valid
         fill_opacity=0.7,
         line_opacity=0.2,
-        legend_name=title,
+        legend_name=legend_title,
     ).add_to(m)
 
     # Create a GeoJson layer with tooltips
