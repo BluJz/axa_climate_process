@@ -93,7 +93,7 @@ def plot_map_snapshot(gdf, meteo_column):
     # Extract unique months and convert to a readable format
     unique_months = gdf['date'].dt.strftime('%B %Y').unique()
     # Create a select box for user to choose the month
-    selected_month = st.selectbox("Select a month", unique_months)
+    selected_month = st.selectbox("Sélectionnez le mois", unique_months)
     # Filter the DataFrame based on the user's selection
     # Convert 'selected_month' back to datetime for comparison
     selected_month_dt = pd.to_datetime(selected_month)
