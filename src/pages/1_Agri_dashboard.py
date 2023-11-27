@@ -3,10 +3,6 @@ import pandas as pd
 import altair as alt
 from utils.data_extraction import load_agri_data
 
-# Sample DataFrame (replace this with your actual DataFrame)
-# agri_df = pd.read_csv('your_data.csv')
-
-# Streamlit app
 def main():
     st.title('Dashboard rendements agricoles')
     agri_df = load_agri_data()

@@ -3,6 +3,7 @@ import pandas as pd
 from shapely.ops import nearest_points
 import streamlit as st
 
+@st.cache_data
 def load_agri_data(path="../data/agreste.csv", drop_columns=['Unnamed: 0', 'n1', 'n2', 'n3', 'n4', 'n5', 'departement']):
     df_agri = pd.read_csv(path)
     df_agri.drop(columns=drop_columns, inplace=True)
@@ -11,6 +12,7 @@ def load_agri_data(path="../data/agreste.csv", drop_columns=['Unnamed: 0', 'n1',
 
     return df_agri
 
+@st.cache_data
 def load_meteo_data(path="../data/ERA5_data.parquet"):
     df_meteorological = pd.read_parquet(path)
     return df_meteorological
