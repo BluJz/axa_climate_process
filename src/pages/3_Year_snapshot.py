@@ -89,7 +89,7 @@ def plot_agri_yield(year):
                     value=dpt_filtered_df.iloc[0]['value']
                 )
 
-def plot_map_snapshot(gdf):
+def plot_map_snapshot(gdf, meteo_column):
     # Extract unique months and convert to a readable format
     unique_months = gdf['date'].dt.strftime('%B %Y').unique()
     # Create a select box for user to choose the month
@@ -100,7 +100,7 @@ def plot_map_snapshot(gdf):
     filtered_gdf = gdf[gdf['date'].dt.month == selected_month_dt.month]
     geojson_map = filtered_gdf.drop(columns=['date']).to_json()
     
-    m = create_map(filtered_gdf, geojson_map)
+    m = create_map(filtered_gdf, geojson_map, meteo_column)
 
     folium_static(m, width=725)
 
@@ -121,7 +121,7 @@ def main():
     
     gdf_meteo_year, gdf_meteo_mean = plot_monthly(meteo_column, year, df_meteo=df_meteo, gdf_geom=gdf_geom)
 
-    plot_map_snapshot(gdf_meteo_year)
+    plot_map_snapshot(gdf_meteo_year, meteo_column)
 
     
 
